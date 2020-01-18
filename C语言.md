@@ -202,11 +202,69 @@ void shell_sort(int* data, int len)
 
 ## 归并排序:
 
-思想:
+思想:将两个已经排序的序列合并到一个序列的操作，归并排序算法依赖归并操作
+
+1.申请空间，大小为两个已排序序列大小之和，用来存放合并后的序列；
+
+2.设置两个指针，分别只想两个有序序列的起始位置；
+
+3.比较两个指针指向的元素的大小，将相对叫小（大）的元素放入到 申请的空间中，并将指针向后移动；
+
+4.重复3的步骤，知道某一指针到有序序列的尾部；
+
+5.将另一个序列中剩余的元素 复制到 申请的空间的尾部
+
+```c
+void merge(int* src, int* dst, int low, int high, int mid)
+
+{
+​    int i = low;
+​    int j = mid + 1;
+​    int k = low;
+​    while (i <= mid && j <= high)
+​    {
+​        if (src[i] < src[j])
+​        {
+​            dst[k++] = src[i++];
+​        }
+​        else
+​        {
+​            dst[k++] = src[j++];
+​        }
+​    }
+​    while(i <= mid)
+​    {
+​        dst[k++] = src[i++];
+​    }
+​    while(j <= high)
+​    {
+​        dst[k++] = src[j++];
+​    }
+}
+
+void merge_sort(int* src, int* dst, int low, int high, int len)
+{
+​    int mid = (low + high) / 2;
+​    int* tmpDst = NULL;
+​    if(low == high)
+​    {
+​        dst[low] = src[low];
+​    }
+​    else
+​    {
+​        tmpDst = malloc(sizeof(int) * len);
+​        if(NULL != tmpDst)
+​        {
+​            merge_sort(src, tmpDst, low, mid, len);
+​            merge_sort(src, tmpDst, mid + 1, high, len);
+​            merge(tmpDst, dst, low, high, mid);
+​        }
+​        free(tmpDst);
+​    }
+}
 
 
-
-
+```
 
 
 
